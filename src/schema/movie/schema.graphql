@@ -6,11 +6,11 @@ type Movie {
   createdAt: String!
   updatedAt: String!
 }
-type Query {
+extend type Query {
   movies: [Movie]
   movie(id: Int!): Movie
 }
-type Mutation {
+extend type Mutation {
   createMovie(title: String!, year: Int!, genre: String): Movie
   deleteMovie(title: Int!): Movie
   updateMovie(id: Int!, year: Int!): Movie

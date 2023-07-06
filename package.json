@@ -26,6 +26,7 @@
     "nodemon": "^2.0.22"
   },
   "devDependencies": {
+    "@eddeee888/gcg-typescript-resolver-files": "^0.5.0",
     "@graphql-codegen/cli": "^4.0.1",
     "@graphql-codegen/typescript": "^4.0.1",
     "@graphql-codegen/typescript-document-nodes": "4.0.1",

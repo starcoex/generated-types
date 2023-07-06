@@ -1,7 +1,4 @@
-import { Resolvers } from "../../../generated/graphql";
-import mutations from "./Mutation/mutations";
-import queries from "./Query/queries";
-
-const resolvers: Resolvers = { Query: queries, Mutation: mutations };
-
-export default resolvers;
+import type   { MovieResolvers } from './../../types.generated';
+    export const Movie: MovieResolvers = { 
+    /* Implement Movie resolver logic here */ 
+  };

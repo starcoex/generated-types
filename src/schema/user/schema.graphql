@@ -1,0 +1,9 @@
+type User {
+  id: ID!
+  fullName: String!
+  isAdmin: Boolean!
+}
+
+extend type Query {
+  user(id: ID!): User
+}

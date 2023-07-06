@@ -5,17 +5,19 @@ import path from "path";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { loadFiles } from "@graphql-tools/load-files";
+import shcema from "./schema/schema";
 import resolversArray from "./schema/schema";
-import resolvers from "./schema/schema";
+import { typeDefs } from "./schema/typeDefs.generated";
+import { resolvers } from "./schema/resolvers.generated";
 
 const __filenaem = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filenaem);
 // console.log(path.join(__dirname, "/schema/movie/schema.graphql"));
 
-console.log(__dirname);
-const typeDefs = await loadFiles(`${__dirname}/**/**/*.graphql`);
+// console.log(__dirname);
+// const typeDefs = await loadFiles(`${__dirname}/**/**/*.graphql`);
+// console.log(resolversArray);
 // const typeDefs = readFileSync("./schema.graphql", "utf-8");
-console.log(typeDefs);
 
 // const typeDefs = `#graphql
 //   # Comments in GraphQL strings (such as this one) start with the hash (#) symbol.
@@ -51,17 +53,11 @@ console.log(typeDefs);
 //   },
 // };
 
-// The ApolloServer constructor requires two parameters: your schema
-// definition and your set of resolvers.
 const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
 
-// Passing an ApolloServer instance to the `startStandaloneServer` function:
-//  1. creates an Express app
-//  2. installs your ApolloServer instance as middleware
-//  3. prepares your app to handle incoming requests
 const { url } = await startStandaloneServer(server, { listen: { port: 4000 } });
 
 console.log(`🚀 Server listening at: ${url}`);
