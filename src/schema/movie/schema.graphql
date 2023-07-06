@@ -12,6 +12,6 @@ extend type Query {
 }
 extend type Mutation {
   createMovie(title: String!, year: Int!, genre: String): Movie
-  deleteMovie(title: Int!): Movie
+  deleteMovie(id: Int!): Movie
   updateMovie(id: Int!, year: Int!): Movie
 }
