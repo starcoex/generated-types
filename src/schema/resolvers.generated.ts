@@ -1,23 +1,19 @@
 /* This file was automatically generated. DO NOT UPDATE MANUALLY. */
     import type   { Resolvers } from './types.generated';
-    import    { AddBookMutationResponse } from './book/resolvers/AddBookMutationResponse';
-import    { Book } from './book/resolvers/Book';
-import    { Movie } from './movie/resolvers/Movie';
-import    { addBook as Mutation_addBook } from './book/resolvers/Mutation/addBook';
-import    { createMovie as Mutation_createMovie } from './movie/resolvers/Mutation/createMovie';
-import    { deleteMovie as Mutation_deleteMovie } from './movie/resolvers/Mutation/deleteMovie';
-import    { updateMovie as Mutation_updateMovie } from './movie/resolvers/Mutation/updateMovie';
-import    { books as Query_books } from './book/resolvers/Query/books';
-import    { movie as Query_movie } from './movie/resolvers/Query/movie';
-import    { movies as Query_movies } from './movie/resolvers/Query/movies';
-import    { user as Query_user } from './user/resolvers/Query/user';
+    import    { EditProfileResult } from './user/resolvers/EditProfileResult';
+import    { LoginResult } from './user/resolvers/LoginResult';
+import    { createAccount as Mutation_createAccount } from './user/resolvers/Mutation/createAccount';
+import    { editProfile as Mutation_editProfile } from './user/resolvers/Mutation/editProfile';
+import    { login as Mutation_login } from './user/resolvers/Mutation/login';
+import    { seeProfile as Query_seeProfile } from './user/resolvers/Query/seeProfile';
+import    { SeeProfileResult } from './user/resolvers/SeeProfileResult';
 import    { User } from './user/resolvers/User';
     export const resolvers: Resolvers = {
-      Query: { books: Query_books,movie: Query_movie,movies: Query_movies,user: Query_user },
-      Mutation: { addBook: Mutation_addBook,createMovie: Mutation_createMovie,deleteMovie: Mutation_deleteMovie,updateMovie: Mutation_updateMovie },
+      Query: { seeProfile: Query_seeProfile },
+      Mutation: { createAccount: Mutation_createAccount,editProfile: Mutation_editProfile,login: Mutation_login },
       
-      AddBookMutationResponse: AddBookMutationResponse,
-Book: Book,
-Movie: Movie,
+      EditProfileResult: EditProfileResult,
+LoginResult: LoginResult,
+SeeProfileResult: SeeProfileResult,
 User: User
     }

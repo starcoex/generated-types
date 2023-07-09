@@ -1,9 +1,44 @@
 type User {
-  id: ID!
-  fullName: String!
-  isAdmin: Boolean!
+  id: Int!
+  firstName: String!
+  lastName: String
+  username: String!
+  email: String!
+  createdAt: String
+  updatedAt: String
+}
+type SeeProfileResult {
+  ok: Boolean
+  error: String
+}
+type LoginResult {
+  ok: Boolean!
+  token: String
+  error: String
+}
+type EditProfileResult {
+  ok: Boolean
+  error: String
 }
 
+extend type Mutation {
+  createAccount(
+    firstName: String!
+    lastName: String
+    username: String
+    email: String!
+    password: String!
+  ): User
+  login(username: String!, password: String!): LoginResult!
+  editProfile(
+    firstName: String
+    lastName: String
+    username: String
+    email: String
+    password: String
+  ): # token: String!
+  EditProfileResult
+}
 extend type Query {
-  user(id: ID!): User
+  seeProfile(username: String): User
 }
