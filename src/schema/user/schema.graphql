@@ -4,6 +4,8 @@ type User {
   lastName: String
   username: String!
   email: String!
+  bio: String
+  avatar: String
   createdAt: String
   updatedAt: String
 }
@@ -36,9 +38,10 @@ extend type Mutation {
     username: String
     email: String
     password: String
-  ): # token: String!
-  EditProfileResult
+    bio: String
+    avatar: Upload
+  ): EditProfileResult
 }
 extend type Query {
-  seeProfile(username: String): User
+  seeProfile(username: String): SeeProfileResult
 }

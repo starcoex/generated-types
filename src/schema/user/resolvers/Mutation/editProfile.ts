@@ -3,15 +3,25 @@ import { getUser, protectResolver } from "../../../../utils/users";
 import type { MutationResolvers } from "./../../../types.generated";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-export const editProfile: NonNullable<
-  MutationResolvers["editProfile"]
-> = async (_parent, _arg, _ctx) => {
-  const { firstName, lastName, username, email, password: newPassword } = _arg;
+import fs from "fs";
+const resolverFn = async (_parent, _arg, _ctx) => {
+  const {
+    firstName,
+    lastName,
+    username,
+    email,
+    password: newPassword,
+    bio,
+    avatar,
+  } = _arg;
+  const { filename, createReadStream } = await avatar;
+  const readStream = createReadStream();
+  const writeStream = fs.createWriteStream(
+    process.cwd() + "/uploads/" + filename
+  );
+  readStream.pipe(writeStream);
   const { loggedInUser, protectMiddlware } = _ctx;
-  console.log(_ctx);
-  protectMiddlware(loggedInUser);
-  //   const { id }: any = await jwt.verify(token, process.env.TOKEN_KEY);
+  //   protectMiddlware(loggedInUser);
   let checkedPassword = null;
   if (newPassword) {
     checkedPassword = await bcrypt.hashSync(checkedPassword, 10);
@@ -25,6 +35,7 @@ export const editProfile: NonNullable<
       lastName,
       username,
       email,
+      bio,
       //       password: newPassword,
       //       ...(checkedPassword && { password: checkedPassword }),
       password: checkedPassword ? checkedPassword : newPassword,
@@ -41,3 +52,5 @@ export const editProfile: NonNullable<
     };
   }
 };
+export const editProfile: NonNullable<MutationResolvers["editProfile"]> =
+  protectResolver(resolverFn);

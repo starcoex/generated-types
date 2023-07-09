@@ -12,15 +12,15 @@ export const seeProfile: NonNullable<QueryResolvers["seeProfile"]> = async (
       username,
     },
   });
-  return user;
-  // if (user) {
-  //   return {
-  //     ok: true,
-  //   };
-  // } else {
-  //   return {
-  //     ok: false,
-  //     error: "Could not Username",
-  //   };
-  // }
+  // return user;
+  if (user) {
+    return {
+      ok: true,
+    };
+  } else {
+    return {
+      ok: false,
+      error: "Could not Username",
+    };
+  }
 };

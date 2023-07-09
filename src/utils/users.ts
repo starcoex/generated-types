@@ -26,4 +26,5 @@ export const protectResolver = (ourResolver) => (root, args, context, info) => {
       error: "Please log in to perform this action.",
     };
   }
+  return ourResolver(root, args, context, info);
 };
