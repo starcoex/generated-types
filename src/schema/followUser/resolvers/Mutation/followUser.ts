@@ -1,0 +1,2 @@
+import type   { MutationResolvers } from './../../../types.generated';
+        export const followUser: NonNullable<MutationResolvers['followUser']> = async (_parent, _arg, _ctx) => { /* Implement Mutation.followUser resolver logic here */ };

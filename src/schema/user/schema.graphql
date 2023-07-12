@@ -1,3 +1,12 @@
+scalar Date
+# scalar Upload
+
+type File {
+  filename: String!
+  mimetype: String!
+  encoding: String!
+}
+
 type User {
   id: Int!
   firstName: String!
@@ -6,8 +15,14 @@ type User {
   email: String!
   bio: String
   avatar: String
-  createdAt: String
-  updatedAt: String
+  createdAt: Date!
+  updatedAt: Date!
+  following: [User]
+  followers: [User]
+  totalFollowing: Int
+  totalFollowers: Int
+  isFollowing: Boolean
+  isMe: Boolean
 }
 type SeeProfileResult {
   ok: Boolean
@@ -22,7 +37,28 @@ type EditProfileResult {
   ok: Boolean
   error: String
 }
-
+type FollowUserResult {
+  ok: Boolean!
+  error: String
+}
+type UnFollowUserResult {
+  ok: Boolean
+  error: String
+}
+type SeeFollowersQuery {
+  ok: Boolean!
+  error: String
+  followers: [User]
+  totalPages: Int
+}
+type SeeFollowingQuery {
+  ok: Boolean!
+  error: String
+  following: [User]
+}
+type SearchUsersResult {
+  ok: Boolean
+}
 extend type Mutation {
   createAccount(
     firstName: String!
@@ -39,9 +75,14 @@ extend type Mutation {
     email: String
     password: String
     bio: String
-    avatar: Upload
+    avatar: String
   ): EditProfileResult
+  followUser(tofollow: String!): FollowUserResult
+  unfollowUser(tofollow: String!): UnFollowUserResult
 }
 extend type Query {
-  seeProfile(username: String): SeeProfileResult
+  seeProfile(username: String): User
+  seeFollwers(username: String!, page: Int!): SeeFollowersQuery!
+  seeFollowing(username: String!, lastid: Int): SeeFollowingQuery!
+  searchUsers(keyword: String): [User]
 }

@@ -14,13 +14,26 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
-  Upload: { input: any; output: any; }
+  Date: { input: Date | string; output: Date | string; }
 };
 
 export type EditProfileResult = {
   __typename?: 'EditProfileResult';
   error?: Maybe<Scalars['String']['output']>;
   ok?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type File = {
+  __typename?: 'File';
+  encoding: Scalars['String']['output'];
+  filename: Scalars['String']['output'];
+  mimetype: Scalars['String']['output'];
+};
+
+export type FollowUserResult = {
+  __typename?: 'FollowUserResult';
+  error?: Maybe<Scalars['String']['output']>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type LoginResult = {
@@ -34,7 +47,9 @@ export type Mutation = {
   __typename?: 'Mutation';
   createAccount?: Maybe<User>;
   editProfile?: Maybe<EditProfileResult>;
+  followUser?: Maybe<FollowUserResult>;
   login: LoginResult;
+  unfollowUser?: Maybe<UnFollowUserResult>;
 };
 
 
@@ -48,7 +63,7 @@ export type MutationCreateAccountArgs = {
 
 
 export type MutationEditProfileArgs = {
-  avatar?: InputMaybe<Scalars['Upload']['input']>;
+  avatar?: InputMaybe<Scalars['String']['input']>;
   bio?: InputMaybe<Scalars['String']['input']>;
   email?: InputMaybe<Scalars['String']['input']>;
   firstName?: InputMaybe<Scalars['String']['input']>;
@@ -58,19 +73,69 @@ export type MutationEditProfileArgs = {
 };
 
 
+export type MutationFollowUserArgs = {
+  tofollow: Scalars['String']['input'];
+};
+
+
 export type MutationLoginArgs = {
   password: Scalars['String']['input'];
   username: Scalars['String']['input'];
 };
 
+
+export type MutationUnfollowUserArgs = {
+  tofollow: Scalars['String']['input'];
+};
+
 export type Query = {
   __typename?: 'Query';
-  seeProfile?: Maybe<SeeProfileResult>;
+  searchUsers?: Maybe<Array<Maybe<User>>>;
+  seeFollowing: SeeFollowingQuery;
+  seeFollwers: SeeFollowersQuery;
+  seeProfile?: Maybe<User>;
+};
+
+
+export type QuerySearchUsersArgs = {
+  keyword?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type QuerySeeFollowingArgs = {
+  lastid?: InputMaybe<Scalars['Int']['input']>;
+  username: Scalars['String']['input'];
+};
+
+
+export type QuerySeeFollwersArgs = {
+  page: Scalars['Int']['input'];
+  username: Scalars['String']['input'];
 };
 
 
 export type QuerySeeProfileArgs = {
   username?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type SearchUsersResult = {
+  __typename?: 'SearchUsersResult';
+  ok?: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type SeeFollowersQuery = {
+  __typename?: 'SeeFollowersQuery';
+  error?: Maybe<Scalars['String']['output']>;
+  followers?: Maybe<Array<Maybe<User>>>;
+  ok: Scalars['Boolean']['output'];
+  totalPages?: Maybe<Scalars['Int']['output']>;
+};
+
+export type SeeFollowingQuery = {
+  __typename?: 'SeeFollowingQuery';
+  error?: Maybe<Scalars['String']['output']>;
+  following?: Maybe<Array<Maybe<User>>>;
+  ok: Scalars['Boolean']['output'];
 };
 
 export type SeeProfileResult = {
@@ -79,16 +144,28 @@ export type SeeProfileResult = {
   ok?: Maybe<Scalars['Boolean']['output']>;
 };
 
+export type UnFollowUserResult = {
+  __typename?: 'UnFollowUserResult';
+  error?: Maybe<Scalars['String']['output']>;
+  ok?: Maybe<Scalars['Boolean']['output']>;
+};
+
 export type User = {
   __typename?: 'User';
   avatar?: Maybe<Scalars['String']['output']>;
   bio?: Maybe<Scalars['String']['output']>;
-  createdAt?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['Date']['output'];
   email: Scalars['String']['output'];
   firstName: Scalars['String']['output'];
+  followers?: Maybe<Array<Maybe<User>>>;
+  following?: Maybe<Array<Maybe<User>>>;
   id: Scalars['Int']['output'];
+  isFollowing?: Maybe<Scalars['Boolean']['output']>;
+  isMe?: Maybe<Scalars['Boolean']['output']>;
   lastName?: Maybe<Scalars['String']['output']>;
-  updatedAt?: Maybe<Scalars['String']['output']>;
+  totalFollowers?: Maybe<Scalars['Int']['output']>;
+  totalFollowing?: Maybe<Scalars['Int']['output']>;
+  updatedAt: Scalars['Date']['output'];
   username: Scalars['String']['output'];
 };
 
@@ -163,35 +240,64 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
+  Date: ResolverTypeWrapper<Scalars['Date']['output']>;
   EditProfileResult: ResolverTypeWrapper<EditProfileResult>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Boolean: ResolverTypeWrapper<Scalars['Boolean']['output']>;
+  File: ResolverTypeWrapper<File>;
+  FollowUserResult: ResolverTypeWrapper<FollowUserResult>;
   LoginResult: ResolverTypeWrapper<LoginResult>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
-  SeeProfileResult: ResolverTypeWrapper<SeeProfileResult>;
-  Upload: ResolverTypeWrapper<Scalars['Upload']['output']>;
-  User: ResolverTypeWrapper<User>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
+  SearchUsersResult: ResolverTypeWrapper<SearchUsersResult>;
+  SeeFollowersQuery: ResolverTypeWrapper<SeeFollowersQuery>;
+  SeeFollowingQuery: ResolverTypeWrapper<SeeFollowingQuery>;
+  SeeProfileResult: ResolverTypeWrapper<SeeProfileResult>;
+  UnFollowUserResult: ResolverTypeWrapper<UnFollowUserResult>;
+  User: ResolverTypeWrapper<User>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
+  Date: Scalars['Date']['output'];
   EditProfileResult: EditProfileResult;
   String: Scalars['String']['output'];
   Boolean: Scalars['Boolean']['output'];
+  File: File;
+  FollowUserResult: FollowUserResult;
   LoginResult: LoginResult;
   Mutation: {};
   Query: {};
-  SeeProfileResult: SeeProfileResult;
-  Upload: Scalars['Upload']['output'];
-  User: User;
   Int: Scalars['Int']['output'];
+  SearchUsersResult: SearchUsersResult;
+  SeeFollowersQuery: SeeFollowersQuery;
+  SeeFollowingQuery: SeeFollowingQuery;
+  SeeProfileResult: SeeProfileResult;
+  UnFollowUserResult: UnFollowUserResult;
+  User: User;
 };
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date';
+}
 
 export type EditProfileResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['EditProfileResult'] = ResolversParentTypes['EditProfileResult']> = {
   error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   ok?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FileResolvers<ContextType = any, ParentType extends ResolversParentTypes['File'] = ResolversParentTypes['File']> = {
+  encoding?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  filename?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  mimetype?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FollowUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['FollowUserResult'] = ResolversParentTypes['FollowUserResult']> = {
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ok?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -205,11 +311,36 @@ export type LoginResultResolvers<ContextType = any, ParentType extends Resolvers
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   createAccount?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, RequireFields<MutationCreateAccountArgs, 'email' | 'firstName' | 'password'>>;
   editProfile?: Resolver<Maybe<ResolversTypes['EditProfileResult']>, ParentType, ContextType, Partial<MutationEditProfileArgs>>;
+  followUser?: Resolver<Maybe<ResolversTypes['FollowUserResult']>, ParentType, ContextType, RequireFields<MutationFollowUserArgs, 'tofollow'>>;
   login?: Resolver<ResolversTypes['LoginResult'], ParentType, ContextType, RequireFields<MutationLoginArgs, 'password' | 'username'>>;
+  unfollowUser?: Resolver<Maybe<ResolversTypes['UnFollowUserResult']>, ParentType, ContextType, RequireFields<MutationUnfollowUserArgs, 'tofollow'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  seeProfile?: Resolver<Maybe<ResolversTypes['SeeProfileResult']>, ParentType, ContextType, Partial<QuerySeeProfileArgs>>;
+  searchUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType, Partial<QuerySearchUsersArgs>>;
+  seeFollowing?: Resolver<ResolversTypes['SeeFollowingQuery'], ParentType, ContextType, RequireFields<QuerySeeFollowingArgs, 'username'>>;
+  seeFollwers?: Resolver<ResolversTypes['SeeFollowersQuery'], ParentType, ContextType, RequireFields<QuerySeeFollwersArgs, 'page' | 'username'>>;
+  seeProfile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType, Partial<QuerySeeProfileArgs>>;
+};
+
+export type SearchUsersResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SearchUsersResult'] = ResolversParentTypes['SearchUsersResult']> = {
+  ok?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SeeFollowersQueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['SeeFollowersQuery'] = ResolversParentTypes['SeeFollowersQuery']> = {
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  followers?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  ok?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  totalPages?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type SeeFollowingQueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['SeeFollowingQuery'] = ResolversParentTypes['SeeFollowingQuery']> = {
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  following?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  ok?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type SeeProfileResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['SeeProfileResult'] = ResolversParentTypes['SeeProfileResult']> = {
@@ -218,30 +349,44 @@ export type SeeProfileResultResolvers<ContextType = any, ParentType extends Reso
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload';
-}
+export type UnFollowUserResultResolvers<ContextType = any, ParentType extends ResolversParentTypes['UnFollowUserResult'] = ResolversParentTypes['UnFollowUserResult']> = {
+  error?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  ok?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
 
 export type UserResolvers<ContextType = any, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = {
   avatar?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  createdAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   firstName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  followers?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
+  following?: Resolver<Maybe<Array<Maybe<ResolversTypes['User']>>>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  isFollowing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  isMe?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  totalFollowers?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  totalFollowing?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['Date'], ParentType, ContextType>;
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export type Resolvers<ContextType = any> = {
+  Date?: GraphQLScalarType;
   EditProfileResult?: EditProfileResultResolvers<ContextType>;
+  File?: FileResolvers<ContextType>;
+  FollowUserResult?: FollowUserResultResolvers<ContextType>;
   LoginResult?: LoginResultResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SearchUsersResult?: SearchUsersResultResolvers<ContextType>;
+  SeeFollowersQuery?: SeeFollowersQueryResolvers<ContextType>;
+  SeeFollowingQuery?: SeeFollowingQueryResolvers<ContextType>;
   SeeProfileResult?: SeeProfileResultResolvers<ContextType>;
-  Upload?: GraphQLScalarType;
+  UnFollowUserResult?: UnFollowUserResultResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 
